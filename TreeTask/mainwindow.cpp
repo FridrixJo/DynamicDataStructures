@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->Tree->setColumnWidth(0,130);
     ui->Tree->setColumnWidth(1,130);
     ui->Tree->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->Tree->setHorizontalHeaderLabels(QStringList() << " Key " << " Data ");
 
     ui->spinBox->setRange(INT_MIN,INT_MAX);
 
@@ -206,6 +207,10 @@ void MainWindow::on_pushButton_3_clicked()
     if (element != nullptr)
     {
         ui->textEdit->setText("Data with such key is " + element->data);
+    }
+    else
+    {
+        ui->textEdit->setText("There is no element with such key");
     }
 }
 

@@ -629,7 +629,47 @@ release/mainwindow.o: ../TreeTask/mainwindow.cpp ../TreeTask/mainwindow.h \
 		D:/ide/6.2.3/mingw_64/include/QtWidgets/qdialog.h \
 		../TreeTask/tree.h \
 		D:/ide/6.2.3/mingw_64/include/QtCore/QString \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		D:/ide/6.2.3/mingw_64/include/QtCore/QVariant \
+		D:/ide/6.2.3/mingw_64/include/QtWidgets/QApplication \
+		D:/ide/6.2.3/mingw_64/include/QtWidgets/qapplication.h \
+		D:/ide/6.2.3/mingw_64/include/QtCore/qcoreapplication.h \
+		D:/ide/6.2.3/mingw_64/include/QtCore/qeventloop.h \
+		D:/ide/6.2.3/mingw_64/include/QtCore/qcoreapplication_platform.h \
+		D:/ide/6.2.3/mingw_64/include/QtCore/qfuture.h \
+		D:/ide/6.2.3/mingw_64/include/QtCore/qfutureinterface.h \
+		D:/ide/6.2.3/mingw_64/include/QtCore/qmutex.h \
+		D:/ide/6.2.3/mingw_64/include/QtCore/qresultstore.h \
+		D:/ide/6.2.3/mingw_64/include/QtCore/qfuture_impl.h \
+		D:/ide/6.2.3/mingw_64/include/QtCore/qthreadpool.h \
+		D:/ide/6.2.3/mingw_64/include/QtCore/qthread.h \
+		D:/ide/6.2.3/mingw_64/include/QtCore/qdeadlinetimer.h \
+		D:/ide/6.2.3/mingw_64/include/QtCore/qelapsedtimer.h \
+		D:/ide/6.2.3/mingw_64/include/QtCore/qrunnable.h \
+		D:/ide/6.2.3/mingw_64/include/QtCore/qexception.h \
+		D:/ide/6.2.3/mingw_64/include/QtGui/qguiapplication.h \
+		D:/ide/6.2.3/mingw_64/include/QtGui/qinputmethod.h \
+		D:/ide/6.2.3/mingw_64/include/QtGui/qguiapplication_platform.h \
+		D:/ide/6.2.3/mingw_64/include/QtWidgets/QComboBox \
+		D:/ide/6.2.3/mingw_64/include/QtWidgets/qcombobox.h \
+		D:/ide/6.2.3/mingw_64/include/QtWidgets/QHeaderView \
+		D:/ide/6.2.3/mingw_64/include/QtWidgets/qheaderview.h \
+		D:/ide/6.2.3/mingw_64/include/QtWidgets/QLabel \
+		D:/ide/6.2.3/mingw_64/include/QtWidgets/qlabel.h \
+		D:/ide/6.2.3/mingw_64/include/QtGui/qpicture.h \
+		D:/ide/6.2.3/mingw_64/include/QtGui/qtextdocument.h \
+		D:/ide/6.2.3/mingw_64/include/QtWidgets/QPushButton \
+		D:/ide/6.2.3/mingw_64/include/QtWidgets/qpushbutton.h \
+		D:/ide/6.2.3/mingw_64/include/QtWidgets/qabstractbutton.h \
+		D:/ide/6.2.3/mingw_64/include/QtWidgets/QSpinBox \
+		D:/ide/6.2.3/mingw_64/include/QtWidgets/qspinbox.h \
+		D:/ide/6.2.3/mingw_64/include/QtWidgets/QTextEdit \
+		D:/ide/6.2.3/mingw_64/include/QtWidgets/qtextedit.h \
+		D:/ide/6.2.3/mingw_64/include/QtGui/qtextoption.h \
+		D:/ide/6.2.3/mingw_64/include/QtGui/qtextcursor.h \
+		D:/ide/6.2.3/mingw_64/include/QtGui/qtextformat.h \
+		D:/ide/6.2.3/mingw_64/include/QtGui/qpen.h \
+		D:/ide/6.2.3/mingw_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\mainwindow.o ..\TreeTask\mainwindow.cpp
 
 release/moc_mainwindow.o: release/moc_mainwindow.cpp 

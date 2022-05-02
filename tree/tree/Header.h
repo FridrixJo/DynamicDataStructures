@@ -2,6 +2,7 @@
 #include <iostream>
 #include "../../../LABA$5/queue/queue/queue.h"
 #include <vector>
+#include "../../../LABA$3/stack/stack/stack.h"
 
 template <typename T>
 class AVLTree {
@@ -12,6 +13,7 @@ public:
 		T data;
 		Node* left;
 		Node* right;
+		Node* parent;
 		int height;
 
 		Node() = default;
@@ -20,15 +22,16 @@ public:
 		}
 	};
 
-	Node* newNode(int key, T data = T())
+	Node* newNode(Node* parent, int key, T data = T())
 	{
 		Node* node = new Node();
 		node->key = key;
 		node->data = data;
 		node->left = nullptr;
 		node->right = nullptr;
-		node->height = 1; // new node is initially
-						  // added at leaf
+		node->parent = parent;
+		node->height = 1;
+
 		return(node);
 	}
 
@@ -54,6 +57,12 @@ public:
 		x->right = y;
 		y->left = T2;
 
+		x->parent = y->parent;
+		y->parent = x;
+
+		if (T2)
+			T2->parent = y;
+
 		y->height = max(height(y->left),
 			height(y->right)) + 1;
 		x->height = max(height(x->left),
@@ -69,6 +78,12 @@ public:
 
 		y->left = x;
 		x->right = T2;
+
+		y->parent = x->parent;
+		x->parent = y;
+
+		if (T2)
+			T2->parent = x;
 
 		x->height = max(height(x->left),
 			height(x->right)) + 1;
@@ -88,61 +103,46 @@ public:
 		return heightL - heightR;
 	}
 
-	Node* insert(Node* node, int key, T data = T())
+	Node* insert(Node* parentNode, Node* node, int key, T data = T())
 	{
-		/* 1. Perform the normal BST insertion */
 		if (node == nullptr) {
-			return (newNode(key, data));
+			return (newNode(parentNode, key, data));
 		}
 
 		if (key < node->key)
-			node->left = insert(node->left, key, data);
+			node->left = insert(node, node->left, key, data);
 		else if (key > node->key)
-			node->right = insert(node->right, key, data);
-		else // Equal keys are not allowed in BST
+			node->right = insert(node, node->right, key, data);
+		else
 			return node;
 
-		/* 2. Update height of this ancestor node */
 		node->height = 1 + max(height(node->left), height(node->right));
 
-		/* 3. Get the balance factor of this ancestor
-			node to check whether this node became
-			unbalanced */
 		int balance = getBalance(node);
 
-		// If this node becomes unbalanced, then
-		// there are 4 cases
 
-		// Left Left Case
 		if (balance > 1 && key < node->left->key)
 			return rightRotate(node);
 
-		// Right Right Case
 		if (balance < -1 && key > node->right->key)
 			return leftRotate(node);
 
-		// Left Right Case
 		if (balance > 1 && key > node->left->key)
 		{
 			node->left = leftRotate(node->left);
 			return rightRotate(node);
 		}
 
-		// Right Left Case
+
 		if (balance < -1 && key < node->right->key)
 		{
 			node->right = rightRotate(node->right);
 			return leftRotate(node);
 		}
 
-		/* return the (unchanged) node pointer */
 		return node;
 	}
 
-	// Recursive function to delete a node
-	// with given key from subtree with
-	// given root. It returns root of the
-	// modified subtree.
 	Node* deleteNode(Node* root, int key)
 	{
 
@@ -154,7 +154,7 @@ public:
 			root->left = deleteNode(root->left, key);
 		else
 		{
-			if (!root->left && !root->right) 
+			if (!root->left && !root->right)
 			{
 				delete root;
 				root = nullptr;
@@ -186,52 +186,35 @@ public:
 			}
 		}
 
-		
-		// If the tree had only one node
-		// then return
+
 		if (root == NULL)
 			return root;
 
-		// STEP 2: UPDATE HEIGHT OF THE CURRENT NODE
 		root->height = 1 + max(height(root->left), height(root->right));
 
-		// STEP 3: GET THE BALANCE FACTOR OF
-		// THIS NODE (to check whether this
-		// node became unbalanced)
 		int balance = getBalance(root);
 
-		// If this node becomes unbalanced,
-		// then there are 4 cases
 
-		// Left Left Case
 		if (balance > 1 && getBalance(root->left) >= 0)
 			return rightRotate(root);
 
-		// Left Right Case
 		if (balance > 1 && getBalance(root->left) < 0)
 		{
 			root->left = leftRotate(root->left);
 			return rightRotate(root);
 		}
 
-		// Right Right Case
-		if (balance < -1 &&getBalance(root->right) <= 0)
+		if (balance < -1 && getBalance(root->right) <= 0)
 			return leftRotate(root);
 
-		// Right Left Case
 		if (balance < -1 && getBalance(root->right) > 0)
 		{
 			root->right = rightRotate(root->right);
 			return leftRotate(root);
 		}
-		
+
 		return root;
 	}
-
-	// A utility function to print preorder
-	// traversal of the tree.
-	// The function also prints height
-	// of every node
 
 	void preOrder(Node* root)
 	{
@@ -283,10 +266,10 @@ public:
 			return nullptr;
 		}
 
-		if (root->key > key) 
+		if (root->key > key)
 		{
 			root->left = findElement(root->left, key);
-		} 
+		}
 		else if (root->key < key)
 		{
 			root->right = findElement(root->right, key);
@@ -313,7 +296,7 @@ public:
 		}
 	}
 
-	void printTree(Node* root,int space = 0) {
+	void printTree(Node* root, int space = 0) {
 		if (!root)
 			return;
 		const int COUNT = 3;
@@ -333,7 +316,7 @@ public:
 	}
 
 	void push(int key, T data = T()) {
-		root = insert(root, key, data);
+		root = insert(nullptr, root, key, data);
 	}
 
 	void pop(int key) {
@@ -360,13 +343,118 @@ public:
 		if (element != nullptr)
 		{
 			std::cout << element->key << "\n";
-		} 
+		}
 		else
 		{
 			std::cout << "nullptr\n";
 		}
 		//std::cout << element != nullptr ? element->key : "nullptr";
 	}
+
+	Node* firstNode(Node* node) {
+		while (node->left) {
+			node = node->left;
+		}
+		return node;
+	}
+
+	Node* lastNode(Node* node) {
+		while (node->right) {
+			node = node->right;
+		}
+		return node->right;
+	}
+
+
+	class ForwardBSTIterator {
+	private:
+		stack<Node*> stack;
+	public:
+
+		ForwardBSTIterator(Node* root) {
+			pushLeft(root);
+		}
+
+		~ForwardBSTIterator() {
+
+		}
+
+		int next() {
+			Node* node = stack.get();
+			stack.pop();
+			if (node->right != nullptr) {
+				pushLeft(node->right);
+			}
+
+			return node->key;
+		}
+
+		bool hasNext() {
+			return stack.size() > 0;
+		}
+
+	private:
+		void pushLeft(Node* root) {
+			while (root != nullptr) {
+				stack.push(root);
+				root = root->left;
+			}
+		}
+	};
+
+	class BSTIterator {
+	private:
+		Node* node;
+
+	public:
+		BSTIterator(Node* node) {
+			this->node = node;
+		}
+
+		~BSTIterator() {
+
+		}
+
+		Node* operator++(int) {
+			if (node->right) {
+				node = node->right;
+				while (node->left)
+					node = node->left;
+			}
+			else {
+				if (node->key < node->parent->key)
+					node = node->parent;
+				else {
+					while (node->key > node->parent->key)
+						node = node->parent;
+					node = node->parent;
+				}
+			}
+			return node;
+		}
+
+		Node* operator--(int) {
+			if (node->left) {
+				node = node->left;
+				while (node->right)
+					node = node->right;
+			}
+			else {
+				if (node->key > node->parent->key)
+					node = node->parent;
+				else {
+					while (node->key < node->parent->key)
+						node = node->parent;
+					node = node->parent;
+				}
+			}
+			return node;
+		}
+
+		int& operator*() {
+			return node->key;
+		}
+	};
 };
 
 /*
