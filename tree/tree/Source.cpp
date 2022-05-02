@@ -5,9 +5,8 @@
 
 int main() {
 	srand(time(NULL));
-	AVLTree<char> a;
-	for (int i = 0; i < 15; i++) {
-		int n = rand() % 100 + 1;
+	AVLTree<int> a;
+	for (int i = 0; i < 100; i++) {
 		a.push(i);
 	}
 
@@ -15,24 +14,12 @@ int main() {
 
 	std::cout << "\n\n";
 
-	auto it = AVLTree<char>::BSTIterator(a.firstNode(a.root));
-	it++;
-	it++;
-	it++;
-	it++;
-	it++;
-	it++;
-	it++;
-	it++;
-	it--;
-	it--;
-	it--;
-	it++;
-	it++;
-	it++;
-	std::cout << *it;
+	auto it = AVLTree<int>::BSTIterator(a.begin());
+	auto it_end = AVLTree<int>::BSTIterator(a.end());
+	for (it; it != it_end; it++) {
+		std::cout << *it << "\n";
+	}
+	std::cout << "\n\n";
 
-
-	
 	return 0;
 }

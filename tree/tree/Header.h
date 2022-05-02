@@ -3,12 +3,13 @@
 #include "../../../LABA$5/queue/queue/queue.h"
 #include <vector>
 #include "../../../LABA$3/stack/stack/stack.h"
+#include "../../../LABA$3/double_list/double_list/doube_list.h"
+#include <list>
 
 template <typename T>
 class AVLTree {
 public:
-	class Node {
-	public:
+	struct Node {
 		int key;
 		T data;
 		Node* left;
@@ -17,9 +18,7 @@ public:
 		int height;
 
 		Node() = default;
-		~Node() {
-
-		}
+		~Node() = default;
 	};
 
 	Node* newNode(Node* parent, int key, T data = T())
@@ -362,7 +361,7 @@ public:
 		while (node->right) {
 			node = node->right;
 		}
-		return node->right;
+		return node;
 	}
 
 
@@ -416,6 +415,9 @@ public:
 		}
 
 		Node* operator++(int) {
+			if (!node) {
+				return nullptr;
+			}
 			if (node->right) {
 				node = node->right;
 				while (node->left)
@@ -425,8 +427,9 @@ public:
 				if (node->key < node->parent->key)
 					node = node->parent;
 				else {
-					while (node->key > node->parent->key)
+					while (node->parent && node->key > node->parent->key) {
 						node = node->parent;
+					}
 					node = node->parent;
 				}
 			}
@@ -443,8 +446,9 @@ public:
 				if (node->key > node->parent->key)
 					node = node->parent;
 				else {
-					while (node->key < node->parent->key)
+					while (node->key < node->parent->key) {
 						node = node->parent;
+					}
 					node = node->parent;
 				}
 			}
@@ -454,8 +458,63 @@ public:
 		int& operator*() {
 			return node->key;
 		}
+
+		bool operator!=(const BSTIterator& other) { return node != other.node; }
+		bool operator==(const BSTIterator& other) { return node == other.node; }
 	};
+
+	Node* begin() {
+		return firstNode(this->root);
+	}
+
+	Node* back() {
+		return lastNode(this->root);
+	}
+
+	Node* end() {
+		return lastNode(this->root)->right;
+	}
+
+	class BSTListIterator {
+	private:
+		std::list<Node*> list;
+		double_list<Node>::Iterator it = double_list<Node>::Iterator(list.front());
+
+		void inOrder(Node* node) {
+			if (node == nullptr) return;
+			inOrder(node->left);
+			list.push_back(node);
+			inOrder(node->right);
+		}
+
+
+	public:
+
+		BSTListIterator(Node* root) {
+			inOrder(root);
+			it = std::list<Node*>::iterator(list.front());
+		}
+
+		~BSTListIterator() = default;
+
+		Node* operator++(int) {
+			it++;
+			return it;
+		}
+
+		Node* operator--(int) {
+			it--;
+			return it;
+		}
+
+		int& operator*() {
+			return **it;
+		}
+	};
+
+
 };
+
 
 /*
 template <typename T>
